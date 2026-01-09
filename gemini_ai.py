@@ -18,13 +18,13 @@ try:
     genai.configure(api_key=GEMINI_API_KEY)
     # Multiple models for different purposes - using faster preview versions
     models = {
-        'fast': genai.GenerativeModel('gemini-2.5-flash-preview-05-20'),  # Fastest model for quick responses
-        'pro': genai.GenerativeModel('gemini-2.5-pro'),                   # Detailed career advice
-        'flash_latest': genai.GenerativeModel('gemini-flash-latest'),     # Always latest stable flash
-        'pro_latest': genai.GenerativeModel('gemini-pro-latest')          # Always latest stable pro
+        'fast': genai.GenerativeModel('gemini-2.5-flash-lite'),  # Fastest model for quick responses
+        'pro': genai.GenerativeModel('gemini-2.5-flash-lite'),                   # Detailed career advice
+        'flash_latest': genai.GenerativeModel('gemini-2.5-flash-lite'),     # Always latest stable flash
+        'pro_latest': genai.GenerativeModel('gemini-2.5-flash-lite')          # Always latest stable pro
     }
     model = models['fast']  # Default to fastest model
-    logger.info("✅ Gemini AI initialized with optimized models (using gemini-2.5-flash-preview-05-20)")
+    logger.info("✅ Gemini AI initialized with optimized models (using gemini-2.5-flash-lite)")
 except Exception as e:
     logger.error(f"❌ Gemini AI initialization failed: {e}")
     models = None
