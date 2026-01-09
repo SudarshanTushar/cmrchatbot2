@@ -1,11 +1,11 @@
-# 🤖 AI Career Guidance Chatbot - Your Personal Career Advisor
+# 🎯 Collective Quiz Bot - Ultimate Telegram Quiz Experience
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
 [![Telegram](https://img.shields.io/badge/Telegram-Bot%20API-blue.svg)](https://core.telegram.org/bots/api)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-green.svg)](https://mongodb.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **🎯 Your AI-Powered Career Guidance Companion - Get Personalized Career Advice, Skill Development Plans, and Professional Growth Strategies! 🎯**
+> **🌟 The Ultimate Group Quiz Experience with Interactive Polls & Real-time Leaderboards! 🌟**
 
 ## 📋 Table of Contents
 
@@ -14,78 +14,75 @@
 - [⚙️ Installation](#️-installation)
 - [🔧 Configuration](#-configuration)
 - [📱 Commands Reference](#-commands-reference)
-- [💬 How to Use](#-how-to-use)
+- [🎮 How to Use](#-how-to-use)
+- [📊 Question Formats](#-question-formats)
 - [🏗️ Project Structure](#️-project-structure)
 - [🛠️ Development](#️-development)
 - [📝 License](#-license)
 
 ## ✨ Features
 
-### 🎯 Core Features
-
-- **AI Career Counseling** - Intelligent career advice powered by Gemini AI
-- **Personalized Guidance** - Tailored recommendations based on your background and goals
-- **Interactive Conversations** - Natural language career discussions
-- **Skill Assessment** - Identify strengths and areas for improvement
-- **Career Path Exploration** - Discover suitable career options
+### 🎮 Core Features
+- **Interactive Quiz Polls** - Telegram's native quiz polls with instant feedback
+- **Real-time Leaderboards** - Live scoring and participant rankings
+- **Multiplayer Group Competitions** - Everyone answers the same questions together
+- **Multiple Question Formats** - Flexible question parsing and validation
+- **Admin Controls** - Group admin permissions for quiz management
+- **Progress Tracking** - Detailed statistics and performance analytics
 
 ### 🔧 Advanced Features
-
-- **Industry Insights** - Current job market trends and salary information
-- **Learning Paths** - Structured skill development recommendations
-- **Resume Optimization** - Professional resume and LinkedIn advice
-- **Interview Preparation** - Practice questions and tips
-- **Networking Strategies** - Professional connection building guidance
+- **Question Set Management** - Create, update, and delete quiz sets
+- **Customizable Timing** - Set delays between questions
+- **Personal Reports** - Individual performance tracking with `/myanswer`
+- **Bulk Question Upload** - Add multiple questions at once
+- **Auto-feedback System** - Instant correct/wrong indicators
+- **Database Persistence** - MongoDB storage for all quiz data
 
 ### 🤖 AI Assistant Features
-
-- **Intelligent Q&A** - Ask detailed career-related questions
-- **Contextual Responses** - Understands conversation history
-- **Multi-language Support** - Career advice in multiple languages
-- **Real-time Updates** - Current industry and job market information
-- **Personalized Learning** - Adaptive recommendations based on interactions
+- **Intelligent Q&A** - Ask questions and get detailed explanations
+- **Creative Content** - Generate poems, stories, translations
+- **Quiz Generation** - Auto-generate questions from study material
+- **Context Awareness** - Reply to messages with relevant context
+- **Multi-language Support** - Respond in user's preferred language
+- **Educational Focus** - Optimized for learning and teaching
 
 ### 👥 User Roles
-
 - **👑 Owner** - Full bot control and management
-- **🔧 Sudo Users** - Administrative assistance and monitoring
-- **👤 Regular Users** - Career guidance and advice seekers
+- **🔧 Sudo Users** - Question set creation and management
+- **👮 Group Admins** - Quiz control in their groups
+- **👤 Regular Users** - Quiz participation and personal stats
 
 ## 🚀 Quick Start
 
-1. **Start Conversation** - Message the bot privately or in groups
-2. **Ask Career Questions** - Use `/ask` for specific questions or just chat naturally
-3. **Get Personalized Advice** - Receive tailored career guidance based on your background
-4. **Explore Options** - Learn about different careers, skills, and industries
-5. **Plan Your Future** - Get actionable steps for career development!
+1. **Add Bot to Group** - Invite the bot to your Telegram group
+2. **Make Admin** - Give bot admin permissions in the group
+3. **Check Available Sets** - Use `/sets` to see quiz options
+4. **Start Quiz** - Use `/quiz set_name` to begin
+5. **Answer Together** - Everyone participates in the same quiz polls!
 
 ## ⚙️ Installation
 
 ### Prerequisites
-
 - Python 3.8 or higher
 - MongoDB database (local or Atlas)
 - Telegram Bot Token from [@BotFather](https://t.me/BotFather)
 - Telegram API credentials from [my.telegram.org](https://my.telegram.org)
-- Gemini AI API Key from [Google AI Studio](https://makersuite.google.com/app/apikey) (Required - for AI career guidance)
+- Gemini AI API Key from [Google AI Studio](https://makersuite.google.com/app/apikey) (Optional - for AI features)
 
 ### Step-by-Step Installation
 
 1. **Clone the Repository**
-
    ```bash
-   git clone https://github.com/yourusername/career-guidance-bot.git
-   cd career-guidance-bot
+   git clone https://github.com/yourusername/quiz-bot.git
+   cd quiz-bot
    ```
 
 2. **Install Dependencies**
-
    ```bash
    pip install -r requirements.txt
    ```
 
 3. **Configure Environment**
-
    - Edit `config.py` with your credentials
    - Set up MongoDB connection
    - Configure bot settings
@@ -110,22 +107,23 @@ MONGO_URI = "your_mongodb_uri"  # MongoDB connection string
 
 # Bot Owner Configuration
 OWNER_ID = your_user_id  # Your Telegram user ID
-SUDO_USERS = [user_id_1, user_id_2]  # Authorized administrators
+SUDO_USERS = [user_id_1, user_id_2]  # Authorized quiz creators
 
-# Gemini AI Configuration (Required - for AI career guidance)
+# Main Quiz Management Group
+MAIN_QUIZ_GROUP_ID = -your_group_id  # Group for creating quiz sets
+
+# Gemini AI Configuration (Optional - for AI features)
 GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app/apikey
 ```
 
 ### Deploy to Heroku:
 
 1. **Create Heroku App**
-
    ```bash
    heroku create your-quiz-bot
    ```
 
 2. **Set Config Variables**
-
    ```bash
    heroku config:set API_ID=your_api_id
    heroku config:set API_HASH=your_api_hash
@@ -140,59 +138,70 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
 
 ## 📱 Commands Reference
 
-### 🤖 AI Career Guidance Commands
+### 👥 Group Commands (Admin Only)
 
-| Command           | Description                     | Usage Example                       |
-| ----------------- | ------------------------------- | ----------------------------------- |
-| `/start`          | Show welcome message and help   | `/start`                            |
-| `/help`           | Display available commands      | `/help`                             |
-| `/ask <question>` | Ask the AI assistant anything   | `/ask What career should I choose?` |
-| `/career <field>` | Get detailed career information | `/career software development`      |
-| `/skills <role>`  | Learn required skills for a job | `/skills data scientist`            |
+| Command | Description | Usage Example |
+|---------|-------------|---------------|
+| `/quiz <set_name>` | Start collective group quiz | `/quiz math_basics` |
+| `/endquiz` | End active group quiz | `/endquiz` |
+| `/time <seconds>` | Set question delay timing | `/time 15` |
+| `/sets` | List available quiz sets | `/sets` |
+| `/cancel` | Cancel active quiz/creation | `/cancel` |
 
-### 💬 Interactive Chat
+### 🔧 Admin Commands (Sudo Users Only)
 
-- **Natural Conversation**: Just send any message for personalized career advice
-- **Contextual Responses**: Reply to previous messages for follow-up guidance
-- **Conversational AI**: The bot understands career-related discussions
+| Command | Description | Usage Example | Location |
+|---------|-------------|---------------|----------|
+| `/new <set_name>` | Create new question set | `/new science_quiz` | Main group only |
+| `/add <set_name>` | Add questions to existing set | `/add math_basics` | Main group only |
+| `/save` | Save uploaded questions | `/save` | Main group only |
+| `/list` | List all question sets | `/list` | Main group only |
+| `/delete <set_name>` | Delete entire question set | `/delete old_quiz` | Main group only |
+| `/qdelete` or `/qdlt` | Delete specific questions | `/qdelete` | Main group only |
+| `/update` | Update existing questions | `/update` | Main group only |
+| `/download <set_name>` | Download question set | `/download math_quiz` | Main group only |
 
-### 👑 Admin Commands (Owner/Sudo Only)
+### 👤 User Commands
 
-| Command                | Description               | Usage Example                   |
-| ---------------------- | ------------------------- | ------------------------------- |
-| `/stats`               | View bot usage statistics | `/stats`                        |
-| `/broadcast <message>` | Send message to all users | `/broadcast Maintenance notice` |
+| Command | Description | Usage Example |
+|---------|-------------|---------------|
+| `/start` | Show welcome message and help | `/start` |
+| `/myanswer [set_name]` | View personal quiz report | `/myanswer math_basics` |
 
-## 💬 How to Use
+### 🧪 Debug Commands
 
-### Getting Started:
+| Command | Description | Usage Example |
+|---------|-------------|---------------|
+| `/testleaderboard` | Test leaderboard functionality | `/testleaderboard` |
 
-1. **Start a Conversation**
+### 🤖 AI Assistant Commands (Owner & Sudo Users Only)
 
-   - Send `/start` to see welcome message
-   - Use `/help` for command reference
+| Command | Description | Usage Example |
+|---------|-------------|---------------|
+| `/ask <question>` | AI assistant for questions & creative requests | `/ask What is photosynthesis?` |
+| `/generate <count> <difficulty> <material>` | Generate quiz from study material | `/generate 5 medium Photosynthesis is...` |
+| `/aistatus` | Check AI assistant status | `/aistatus` |
 
-2. **Ask Career Questions**
+## 🎮 How to Use
 
-   - Use `/ask` for specific questions: `/ask What skills do I need for UX design?`
-   - Or just chat naturally: "I'm interested in technology careers"
+### For Group Admins:
 
-3. **Get Specialized Advice**
+1. **Setup**
+   - Add bot to your group
+   - Make bot admin
+   - Check available quiz sets with `/sets`
 
-   - `/career software` - Learn about software development careers
-   - `/skills product manager` - See required skills for product management
-
+2. **Start Quiz**
+   ```
+   /quiz math_basics
    ```
 
-   ```
-
-4. **Customize Settings**
-
+3. **Customize Settings**
    ```
    /time 10  # Set 10-second delays
    ```
 
-5. **End Quiz**
+4. **End Quiz**
    ```
    /endquiz
    ```
@@ -200,16 +209,14 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
 ### For Quiz Creators (Sudo Users):
 
 1. **Create New Set**
-
    ```
    /new science_quiz
    ```
 
 2. **Add Questions** (Multiple formats supported)
-
    ```
    Q) What is 2+2? A. Two B. Four C. Six D. Eight Answer: B. Four
-
+   
    Q: What is H2O? || A) Hydrogen || B) Water || C) Oxygen || D) Carbon || Answer: B
    ```
 
@@ -221,7 +228,6 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
 ### For Participants:
 
 1. **Answer Questions**
-
    - Click on quiz poll options
    - Get instant feedback (✅/❌)
    - See poll statistics in real-time
@@ -234,7 +240,6 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
 ### For AI Assistant Users (Owner & Sudo Users):
 
 1. **Ask Questions & Get Help**
-
    ```
    /ask What is the theory of relativity?
    /ask Write a poem about programming
@@ -243,7 +248,6 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
    ```
 
 2. **Generate Quiz Questions from Study Material**
-
    ```
    /generate 5 medium Photosynthesis is the process by which plants convert light energy into chemical energy using chlorophyll...
    ```
@@ -253,29 +257,63 @@ GEMINI_API_KEY = "your_gemini_api_key"  # From https://makersuite.google.com/app
    /aistatus
    ```
 
+## 📊 Question Formats
+
+The bot supports two flexible question formats:
+
+### Format 1: Traditional Style
+```
+Q) What is the capital of France?
+A. London B. Berlin C. Paris D. Madrid
+Answer: C. Paris
+```
+
+### Format 2: Pipe-Separated Style
+```
+Q: What is 2+2? || A) Two || B) Four || C) Six || D) Eight || Answer: B
+```
+
+### Multiple Questions in One Message
+```
+Q) Question 1? A. Opt1 B. Opt2 C. Opt3 D. Opt4 Answer: A
+
+Q) Question 2? A. Opt1 B. Opt2 C. Opt3 D. Opt4 Answer: B
+```
+
+### Validation Rules:
+- ✅ Questions must start with `Q)` or `Q:`
+- ✅ Must have 4 options (A, B, C, D)
+- ✅ Answer must be specified with correct letter
+- ✅ Flexible spacing and formatting
+- ✅ Supports both period and parenthesis option markers
+
 ## 🏗️ Project Structure
 
 ```
-career-guidance-bot/
+quiz-bot/
 ├── bot.py                 # Main bot entry point
 ├── config.py              # Configuration settings
 ├── handlers.py            # Command and message handlers
-├── db.py                 # Database operations (simplified)
-├── gemini_ai.py          # AI career guidance assistant
-├── utils.py              # Utility functions (if needed)
+├── db.py                 # Database operations
+├── utils.py              # Utility functions
 ├── requirements.txt      # Python dependencies
 ├── Procfile             # Heroku deployment
 ├── runtime.txt          # Python version specification
-└── README.md            # Project documentation
+└── polls/               # Quiz poll functionality
+    ├── __init__.py
+    ├── questions.py     # Question sending logic
+    ├── answers.py       # Answer handling logic
+    ├── leaderboard.py   # Leaderboard management
+    └── myanswers.py     # Personal statistics
 ```
 
 ### Key Components:
 
 - **`bot.py`** - Application entry point and client setup
 - **`handlers.py`** - All command handlers and message processing
-- **`gemini_ai.py`** - AI career guidance integration
-- **`db.py`** - MongoDB operations and data management
-- **`utils.py`** - Career guidance utility functions
+- **`db.py`** - MongoDB operations and data management  
+- **`utils.py`** - Question parsing and validation utilities
+- **`polls/`** - Modular quiz poll system with specialized handlers
 
 ## 🛠️ Development
 
@@ -286,35 +324,30 @@ career-guidance-bot/
 pyrogram>=2.0.0      # Telegram MTProto client
 tgcrypto>=1.2.5      # Encryption for Pyrogram
 
-# AI Integration
-google-generativeai>=0.3.0  # Gemini AI for career guidance
-
 # Database
 pymongo>=4.0.0       # MongoDB driver
-motor>=3.0.0         # Async MongoDB driver
+motor>=3.0.0         # Async MongoDB driver  
 dnspython>=2.0.0     # DNS resolution for MongoDB
 ```
 
 ### Database Schema
 
 **Collections:**
-
-- `user_conversations` - Conversation history for analytics
-- `user_preferences` - User preference storage
-- `bot_stats` - Usage statistics and metrics
+- `question_sets` - Quiz question storage
+- `user_sessions` - Active quiz sessions  
+- `quiz_results` - Historical results and statistics
 
 ### Key Features Implementation:
 
-- **AI Career Counseling** - Gemini AI integration for intelligent responses
-- **Conversational Interface** - Natural language processing for career questions
-- **Personalized Guidance** - Context-aware career advice
-- **Real-time Responses** - Async handlers for immediate AI responses
-- **Permission System** - Role-based access control for admin features
+- **Quiz Polls** - Using Telegram's native poll API for better UX
+- **Real-time Updates** - Async handlers for immediate response
+- **Session Management** - In-memory and database session tracking
+- **Permission System** - Role-based access control
+- **Error Handling** - Comprehensive error management and logging
 
 ### Local Development:
 
 1. **Setup Environment**
-
    ```bash
    python -m venv venv
    source venv/bin/activate  # Linux/Mac
@@ -323,10 +356,9 @@ dnspython>=2.0.0     # DNS resolution for MongoDB
    ```
 
 2. **Configure Development Settings**
-
    - Use local MongoDB or MongoDB Atlas free tier
    - Create test bot with @BotFather
-   - Get Gemini AI API key from Google AI Studio
+   - Set up development group for testing
 
 3. **Run in Development Mode**
    ```bash
@@ -344,44 +376,39 @@ dnspython>=2.0.0     # DNS resolution for MongoDB
 ## 🔒 Security Features
 
 - **Permission Validation** - Admin and sudo user verification
-- **Input Sanitization** - Message content validation and filtering
-- **API Key Protection** - Secure storage of Gemini AI credentials
-- **Rate Limiting** - Built-in protection against spam and abuse
-- **Conversation Logging** - Optional conversation history for improvement
+- **Group Restrictions** - Main group only for question management
+- **Input Sanitization** - Question format validation and parsing
+- **Session Management** - Secure session handling and cleanup
+- **Rate Limiting** - Built-in protection against spam
 
 ## 📈 Performance
 
-- **Async Operations** - Non-blocking I/O for better response times
-- **AI Caching** - Intelligent response caching for common queries
+- **Async Operations** - Non-blocking I/O for better performance
+- **In-Memory Caching** - Session and settings caching
 - **Efficient Database Queries** - Optimized MongoDB operations
 - **Modular Architecture** - Separated concerns for better maintainability
-- **Fast AI Responses** - Optimized Gemini AI integration
 
 ## 🐛 Troubleshooting
 
 ### Common Issues:
 
 1. **Database Connection Error**
-
    - Check MongoDB URI in config.py
    - Verify network connectivity
    - Ensure database permissions
 
 2. **Bot Not Responding**
-
    - Verify bot token is correct
    - Check API_ID and API_HASH
-   - Ensure bot has necessary permissions
+   - Ensure bot has admin permissions in groups
 
-3. **AI Not Working**
-   - Verify Gemini API key is valid
-   - Check API quota and limits
-   - Ensure internet connectivity for AI requests
+3. **Commands Not Working**
+   - Confirm user has required permissions
+   - Check if command is used in correct group type
+   - Verify bot is added to the group
 
 ### Debug Mode:
-
 Enable logging in `bot.py` for detailed error information:
-
 ```python
 logging.basicConfig(level=logging.DEBUG)
 ```
@@ -389,9 +416,9 @@ logging.basicConfig(level=logging.DEBUG)
 ## 📞 Support
 
 - **Developer**: [@Forever_Crush](https://t.me/Forever_Crush)
-- **Version**: 1.0 (Career Guidance Edition)
-- **Support**: Contact through Telegram
-- **Issues**: [GitHub Issues](https://github.com/yourusername/career-guidance-bot/issues)
+- **Version**: 2.0 (Quiz Poll Edition)
+- **Support**: Contact through the group where bot is added
+- **Issues**: [GitHub Issues](https://github.com/Radhaapi/Quizz/issues)
 
 ## 🤝 Contributing
 
@@ -403,6 +430,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**💝 Made with love for career guidance seekers! 🎯**
-
-⭐ **Star this repo if you found it helpful!** ⭐
+**💝 Made with love for quiz enthusiasts! 🎯**
