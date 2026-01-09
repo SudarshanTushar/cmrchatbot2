@@ -1,101 +1,52 @@
 """
-Database module for AI Career Guidance Chatbot
-Handles MongoDB connection for basic logging and user data
+Database module for Quiz Bot
+Handles MongoDB connection and collections (both sync and async)
 """
 
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from motor.motor_asyncio import AsyncIOMotorClient
 from config import MONGO_URI, DB_NAME
-import logging
+import asyncio
+from typing import Optional
+from datetime import datetime
+from datetime import datetime, timedelta
 
-logger = logging.getLogger(__name__)
-
-# Sync MongoDB Client
+# Sync MongoDB Client (for compatibility)
 try:
     client = MongoClient(MONGO_URI)
     # Test the connection
     client.admin.command('ping')
-    logger.info("✅ MongoDB connection successful!")
-except ConnectionFailure as e:
-    logger.error(f"❌ MongoDB connection failed: {e}")
+    print("MongoDB connection successful!")
+except ConnectionFailure:
+    print("MongoDB connection failed!")
     client = None
 
 # Database
 db = client[DB_NAME] if client is not None else None
 
-# Collections (simplified for career guidance)
-user_conversations = db.user_conversations if db is not None else None  # Store conversation history
-user_preferences = db.user_preferences if db is not None else None     # Store user preferences
-bot_stats = db.bot_stats if db is not None else None                   # Store bot usage statistics
+# Collections (sync)
+question_sets = db.question_sets if db is not None else None  # Stores question sets
+user_sessions = db.user_sessions if db is not None else None  # Stores active user quiz sessions
 
-# Async MongoDB Client
+# Async MongoDB Client (Motor)
 async_client = AsyncIOMotorClient(MONGO_URI)
 async_db = async_client[DB_NAME]
 
 # Async Collections
-async_user_conversations = async_db.user_conversations
-async_user_preferences = async_db.user_preferences
-async_bot_stats = async_db.bot_stats
+async_question_sets = async_db.question_sets
+async_user_sessions = async_db.user_sessions
+async_quiz_results = async_db.quiz_results  # Store individual quiz answers (InlineKeyboard system)
+async_user_scores = async_db.user_scores    # Store cumulative user scores
 
-def get_db_status() -> bool:
-    """Check if database connection is active"""
-    return client is not None and db is not None
+# TTL index setup for quiz results (30 minutes expiry)
+_ttl_initialized = False
 
-async def log_conversation(user_id: int, user_message: str, bot_response: str):
-    """Log a conversation for analytics"""
-    if not async_user_conversations:
+async def setup_ttl_index():
+    """Setup TTL index for quiz results to auto-expire after 30 minutes"""
+    global _ttl_initialized
+    if _ttl_initialized:
         return
-
-    try:
-        await async_user_conversations.insert_one({
-            "user_id": user_id,
-            "user_message": user_message,
-            "bot_response": bot_response,
-            "timestamp": __import__('datetime').datetime.utcnow()
-        })
-    except Exception as e:
-        logger.error(f"Failed to log conversation: {e}")
-
-async def update_bot_stats(command: str, user_id: int):
-    """Update bot usage statistics"""
-    if not async_bot_stats:
-        return
-
-    try:
-        # Increment command usage counter
-        await async_bot_stats.update_one(
-            {"command": command},
-            {"$inc": {"usage_count": 1}, "$set": {"last_used": __import__('datetime').datetime.utcnow()}},
-            upsert=True
-        )
-
-        # Update unique users count
-        await async_bot_stats.update_one(
-            {"type": "unique_users"},
-            {"$addToSet": {"user_ids": user_id}},
-            upsert=True
-        )
-    except Exception as e:
-        logger.error(f"Failed to update bot stats: {e}")
-
-async def get_bot_stats():
-    """Get bot usage statistics"""
-    if not async_bot_stats:
-        return {"error": "Database not available"}
-
-    try:
-        stats = {}
-        async for stat in async_bot_stats.find():
-            if "command" in stat:
-                stats[stat["command"]] = stat.get("usage_count", 0)
-            elif stat.get("type") == "unique_users":
-                stats["unique_users"] = len(stat.get("user_ids", []))
-
-        return stats
-    except Exception as e:
-        logger.error(f"Failed to get bot stats: {e}")
-        return {"error": str(e)}
         
     try:
         # Create TTL index on timestamp field (expires after 30 minutes = 1800 seconds)
